@@ -1,0 +1,11 @@
+{:duct.core/project-ns  replexpl
+ :duct.core/environment :production
+
+ :duct.module/logging {}
+ :duct.module.web/site {}
+ 
+ :duct.router/cascading
+ [#ig/ref :replexpl.handler/example]
+
+ :replexpl.handler/example
+ {}}
