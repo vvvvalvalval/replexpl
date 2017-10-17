@@ -5,6 +5,63 @@
             [org.httpkit.client :as http]
             [cheshire.core :as json]))
 
+(defn api-search
+  [q]
+  (->
+    @(http/request
+       {:method :get
+        :url "https://graph.facebook.com/v2.8/search"
+        :query-params
+        {"q" q
+         "fields" "id, name, fan_count"
+         "type" "page"
+         "access_token" env/fb-token}})
+    :body
+    (json/decode true)
+    :data
+    (sc.api/spy)))
+
+(defn extract-page
+  [search-result]
+  {:page-id (:id search-result)
+   :page-name (:name search-result)
+   :n-likes (:fan_count search-result)})
+
+(defn api-posts
+  [page-id]
+  (->
+    @(http/request
+       {:method :get
+        :url (str "https://graph.facebook.com/v2.8/" page-id "/posts")
+        :query-params
+        {"access_token" env/fb-token}})
+    :body
+    (json/decode true)))
+
+clojure.tools.nrepl.server/handle
+
+(defn extract-last-post
+  [posts-resp]
+  (-> posts-resp
+    :data
+    first
+    :message))
+
+(def a 42)
+
+(defn search
+  [q]
+  {:search q
+   :search-results
+   (->> (api-search q)
+     (take 5)
+     (map extract-page)
+     (pmap (fn [page]
+             (assoc page
+               :last-post
+               (extract-last-post (api-posts (:page-id page))))))
+     vec)})
+
 (def mock-data
   {:search "zztop"
    :search-results
@@ -14,9 +71,9 @@
       :last-post "Back to La Grange!"})})
 
 (defn handle [req]
-  (let [;; FIXME
-        results-data mock-data
-        search-string (:query-string req)]
+  ;; BUG IN HERE
+  (let [search-string (:query-string req)
+        results-data (search search-string)]
     [[:div.container
       [:div.row
        [:div.col-md-6.col-md-offset-3
