@@ -19,11 +19,15 @@
   :profiles
   {:dev  [:project/dev :profiles/dev]
    :repl {:prep-tasks   ^:replace ["javac" "compile"]
-          :repl-options {:init-ns user}}
+          :repl-options {:init-ns user
+                         :nrepl-middleware
+                         [sc.nrepl.middleware/wrap-letsc]}}
    :uberjar {:aot :all}
    :profiles/dev {}
    :project/dev  {:source-paths   ["dev/src"]
                   :resource-paths ["dev/resources"]
                   :dependencies   [[integrant/repl "0.2.0"]
                                    [eftest "0.3.1"]
-                                   [kerodon "0.8.0"]]}})
+                                   [kerodon "0.8.0"]
+                                   [vvvvalvalval/scope-capture "0.1.1"]
+                                   [vvvvalvalval/scope-capture-nrepl "0.2.0"]]}})

@@ -15,7 +15,8 @@
 
 (defn handle [req]
   (let [;; FIXME
-        results-data mock-data]
+        results-data mock-data
+        search-string (:query-string req)]
     [[:div.container
       [:div.row
        [:div.col-md-6.col-md-offset-3
@@ -24,7 +25,7 @@
          [:div
           [:p
            (count (:search-results results-data)) " search results for "
-           [:b (:search results-data)] ":"]
+           [:b search-string] ":"]
           [:div
            (for [sr (:search-results results-data)]
              [:div.panel.panel-default
