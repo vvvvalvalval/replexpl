@@ -19,7 +19,7 @@
     :body
     (json/decode true)
     :data
-    (sc.api/spy)))
+    ))
 
 (defn extract-page
   [search-result]
@@ -37,8 +37,6 @@
         {"access_token" env/fb-token}})
     :body
     (json/decode true)))
-
-clojure.tools.nrepl.server/handle
 
 (defn extract-last-post
   [posts-resp]
@@ -72,8 +70,8 @@ clojure.tools.nrepl.server/handle
 
 (defn handle [req]
   ;; BUG IN HERE
-  (let [search-string (:query-string req)
-        results-data (search search-string)]
+  (let [q (:query-string req)
+        results-data (search q)]
     [[:div.container
       [:div.row
        [:div.col-md-6.col-md-offset-3
@@ -82,7 +80,7 @@ clojure.tools.nrepl.server/handle
          [:div
           [:p
            (count (:search-results results-data)) " search results for "
-           [:b search-string] ":"]
+           [:b q] ":"]
           [:div
            (for [sr (:search-results results-data)]
              [:div.panel.panel-default
