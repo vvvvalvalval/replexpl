@@ -13,9 +13,9 @@
        [:div
         [:div.text-center
          [:h1 "Dummy Facebook Search Engine"]
-         [:p "A search engine on top of the Facebook Graph API"]]
+         [:p "A search engine for places based on the Facebook Graph API"]]
         [:form.form.form-horizontal {:action "/search-results" :method "get"}
-         [:input.form-control {:type "text" :name "search" :placeholder "Search Facebook!"}]]
+         [:input.form-control {:type "text" :name "search" :placeholder "Search a place"}]]
         ]]]]
     ]])
 

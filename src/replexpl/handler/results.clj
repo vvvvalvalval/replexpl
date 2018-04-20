@@ -10,16 +10,15 @@
   (->
     @(http/request
        {:method :get
-        :url "https://graph.facebook.com/v2.8/search"
+        :url "https://graph.facebook.com/v2.12/search"
         :query-params
         {"q" q
          "fields" "id, name, fan_count"
-         "type" "page"
+         "type" "place"
          "access_token" env/fb-token}})
     :body
     (json/decode true)
-    :data
-    ))
+    :data))
 
 (defn extract-page
   [search-result]
